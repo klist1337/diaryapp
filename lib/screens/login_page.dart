@@ -1,64 +1,75 @@
-import 'package:diaryapp/firebase_options.dart';
+import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:diaryapp/screens/profile_page.dart';
+import 'package:diaryapp/services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_button/sign_in_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-           SizedBox(
-              height: 50,
-              child: SignInButton(
-                Buttons.google,
-                text: "Login with Google",
-                onPressed: () async {
-                  try {
-                    showDialog(context: context, builder: (context) => 
-                    const Center(child: CircularProgressIndicator(),));
-                    final userCredential =  await signInWithGoogle();
-                    if (!context.mounted) return ;
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder:(context) => const ProfilePage(),));
-                  }
-                  catch (e) {
-                    if (!context.mounted) return ;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Column(
-                        children: [
-                          Text(e.toString())
-                        ],
-                      ),)
-                    );
-                    Navigator.pop(context);
-                  }
+  State<LoginPage> createState() => _LoginPageState();
+}
 
-                }))
+class _LoginPageState extends State<LoginPage> {
+
+  //UserProfile? userProfile;
+
+  @override
+  Widget build(BuildContext context) {
+    Future login() async {
+      final profile = await AuthService().login();
+      if (!context.mounted) return ;
+      Navigator.pushReplacement(context,
+      MaterialPageRoute(builder: (context) => ProfilePage(
+        photoUrl: profile?.pictureUrl,
+        displayName: profile?.nickname,
+        email: profile?.nickname,
+      )));
+    }
+    return Scaffold(
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/bg_image.jpg'),
+            fit: BoxFit.cover
+          )
+        ) ,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+          SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.38,),
+          const Text('Welcome to your diary',
+          style: TextStyle(
+            fontSize: 50,
+            fontWeight: FontWeight.bold
+          ),),
+          SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.06,),
+           SizedBox(
+            width: MediaQuery.sizeOf(context).width * 0.3,
+             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                shape:const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+                )
+              ),
+              onPressed: (){
+                login();
+              }, 
+              child: const Text('Login', 
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.black
+              ),)),
+           ) 
           ],
         ),
       ),
     );
-  }
-  Future<UserCredential> signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn(
-      clientId: (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.android) ?
-        DefaultFirebaseOptions.currentPlatform.androidClientId : DefaultFirebaseOptions.currentPlatform.iosClientId,  
-    ).signIn() ;
-
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      idToken: googleAuth?.idToken, accessToken: googleAuth?.accessToken
-    );
-    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }

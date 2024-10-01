@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
           centerTitle: true
         ),
         useMaterial3: true,
+        fontFamily: "Dopediary"
       ),
       home: const LoginPage()
     );
