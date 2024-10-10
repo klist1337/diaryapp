@@ -1,5 +1,5 @@
-import 'package:auth0_flutter/auth0_flutter.dart';
-import 'package:diaryapp/screens/profile_page.dart';
+import 'package:diaryapp/helpers/function.dart';
+import 'package:diaryapp/screens/bottom_navbar.dart';
 import 'package:diaryapp/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -12,18 +12,18 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  //UserProfile? userProfile;
 
   @override
   Widget build(BuildContext context) {
     Future login() async {
       final profile = await AuthService().login();
+      saveLoginStatus(profile!.pictureUrl.toString(), profile.nickname!, profile.email!);
       if (!context.mounted) return ;
       Navigator.pushReplacement(context,
-      MaterialPageRoute(builder: (context) => ProfilePage(
-        photoUrl: profile?.pictureUrl,
-        displayName: profile?.nickname,
-        email: profile?.nickname,
+      MaterialPageRoute(builder: (context) => BottomNavbar(
+        photoUrl: profile.pictureUrl.toString(),
+        displayName: profile.nickname,
+        email: profile.email,
       )));
     }
     return Scaffold(
