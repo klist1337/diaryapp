@@ -87,6 +87,12 @@ flutter:
     - family: Dopediary
       fonts:
         - asset: assets/fonts/Dopediarydemo-Yzaza.otf
+    - family: Pettrina
+      fonts:
+        - asset: assets/fonts/Pettrina.otf
+    - family: cereal
+      fonts:
+        - asset: assets/fonts/AirbnbCereal_W_Lt.otf
 
   #   - family: Trajan Pro
   #     fonts:
