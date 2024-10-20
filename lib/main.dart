@@ -1,4 +1,5 @@
 import 'package:diaryapp/helpers/function.dart';
+import 'package:diaryapp/screens/advanced_diary_app/advanced_diary_app.dart';
 import 'package:diaryapp/screens/diaryapp/diary_app.dart';
 import 'package:diaryapp/screens/diaryapp/login_page.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "cereal"
       ),
       home: isLoggin == true
-        ? DiaryApp(photoUrl: picture, displayName: displayName, email: email,)
+        ? AdvancedDiaryApp(photoUrl: picture, displayName: displayName, email: email,)
         : const LoginPage()
     );
   }
