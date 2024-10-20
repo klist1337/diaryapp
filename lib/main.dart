@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "cereal"
       ),
       home: isLoggin == true
-        ? DiaryApp(photoUrl: picture, displayName: displayName,)
+        ? DiaryApp(photoUrl: picture, displayName: displayName, email: email,)
         : const LoginPage()
     );
   }
