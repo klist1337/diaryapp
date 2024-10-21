@@ -155,7 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   StreamBuilder<QuerySnapshot>(
-                    stream: db.collection('notes').snapshots(), 
+                    stream: db.collection('notes').orderBy('date', descending: true).snapshots(), 
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
@@ -165,7 +165,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       }
                       else {
                         final notes = snapshot.data!.docs;
-                        double ratio = (notes.length / 10) + 0.1 ;
                         if (notes.isEmpty) {
                            return const Padding(
                              padding:  EdgeInsets.all(25.0),
@@ -181,17 +180,30 @@ class _ProfilePageState extends State<ProfilePage> {
                         return Column(
                           children: [
                             const SizedBox(height: 10,),
-                            const Text("Your last diary entries",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold
-                              ),),
-                            const SizedBox(height: 10,),
+                            Stack(
+                              children: [
+                                Container(
+                                  width: MediaQuery.sizeOf(context).width,
+                                  height: 40,
+                                  decoration: const BoxDecoration(
+                                    color: Color.fromARGB(255, 232, 171, 221)
+                                  ),
+                                ),
+                                const Positioned(
+                                  left: 110,
+                                  top: 10,
+                                  child: Text("Your last diary entries",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold
+                                    ),),
+                                ),
+                              ],
+                            ),
                             SizedBox(
-                              height: notes.length < 8 ? MediaQuery.sizeOf(context).height * ratio 
-                                      : MediaQuery.sizeOf(context).height * 0.8,
+                              height:  MediaQuery.sizeOf(context).height * 0.25,
                               child: ListView.builder(
-                                itemCount: notes.length,
+                                itemCount: 2,
                                 itemBuilder: (context, index) {
                                   final note = notes[index];
                                   return Center(
@@ -334,6 +346,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   );
                                 }),
                             ),
+                           const SizedBox(height: 10,),
                           ],
                         );
                       }

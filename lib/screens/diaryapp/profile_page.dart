@@ -152,7 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   //   ],
                   // ),
                   StreamBuilder<QuerySnapshot>(
-                    stream: db.collection('notes').snapshots(), 
+                    stream: db.collection('notes').orderBy('date', descending: true).snapshots(), 
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
