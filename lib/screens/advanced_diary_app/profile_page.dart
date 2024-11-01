@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diaryapp/helpers/function.dart';
-import 'package:diaryapp/screens/advanced_diary_app/login_page.dart';
+import 'package:diaryapp/screens/advanced_diary_app/login_page2.dart';
 import 'package:diaryapp/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -145,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 await AuthService().logout();
                                 await clearLoginInfo();
                                 if (!context.mounted) return ;
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const LoginPage()));
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const LoginPage2()));
                                 },
                               icon: const Icon(
                                 Icons.logout ,

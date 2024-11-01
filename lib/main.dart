@@ -1,5 +1,6 @@
 import 'package:diaryapp/helpers/function.dart';
 import 'package:diaryapp/screens/advanced_diary_app/advanced_diary_app.dart';
+import 'package:diaryapp/screens/advanced_diary_app/login_page2.dart';
 import 'package:diaryapp/screens/diaryapp/diary_app.dart';
 import 'package:diaryapp/screens/diaryapp/login_page.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
       ),
       home: isLoggin == true
         ? AdvancedDiaryApp(photoUrl: picture, displayName: displayName, email: email,)
-        : const LoginPage()
+        : const LoginPage2()
     );
   }
 }
