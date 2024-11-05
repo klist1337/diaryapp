@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:diaryapp/helpers/constants.dart';
 import 'package:diaryapp/helpers/function.dart';
 import 'package:diaryapp/screens/advanced_diary_app/login_page2.dart';
 import 'package:diaryapp/services/auth_service.dart';
@@ -48,28 +49,10 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController text = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   
-  List<Map<String, dynamic>> feelings = 
-  [ {"feeling":"Happy", "icon": const Icon(Icons.sentiment_very_satisfied, color: Colors.yellow,)},
-    {"feeling": "Bad" ,"icon": const Icon(Icons.sentiment_neutral, color: Colors.greenAccent,) },
-    {"feeling":"Fearful","icon": const Icon(Icons.sentiment_neutral, color: Colors.orange)},
-    {"feeling":"Angry", "icon":const Icon(Icons.sentiment_neutral, color: Colors.red)},
-    {"feeling":"Disgusted","icon": const Icon(Icons.sentiment_neutral, color: Colors.grey)},
-    {"feeling":"Suprised", "icon":const Icon(Icons.sentiment_neutral, color: Colors.purple)},
-    {"feeling":"Sad","icon": const Icon(Icons.sentiment_very_dissatisfied, color: Colors.blueAccent)},
-    {"feeling":"Sick", "icon":const Icon(Icons.sick, color: Colors.pink)},
-    ];
+ 
     IconData icon = Icons.sentiment_neutral;
     bool isPicked  = false;
-    List<Map<String, dynamic>> iconColors = [
-      {"feeling": "Happy", "color": Colors.yellow},
-      {"feeling": "Bad", "color": Colors.greenAccent},
-      {"feeling": "Fearful", "color": Colors.orange},
-      {"feeling": "Angry", "color": Colors.red},
-      {"feeling": "Disgusted", "color": Colors.grey},
-      {"feeling": "Suprised", "color": Colors.purple},
-      {"feeling": "Sad", "color": Colors.blueAccent},
-      {"feeling": "Sick", "color": Colors.pink}
-    ];
+    
     String feeling = "";
     List<String> notesId = [];
   // List<Widget> icons = 
@@ -201,7 +184,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ],
                             ),
                             SizedBox(
-                              height:  MediaQuery.sizeOf(context).height * 0.25,
+                              height:  MediaQuery.sizeOf(context).height * 0.3,
                               child: ListView.builder(
                                 itemCount: 2,
                                 itemBuilder: (context, index) {
@@ -263,6 +246,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                                               color: Colors.black
                                                             ),                                                
                                                           ),
+                                                          const SizedBox(height: 10,),
+                                                          Center(child: Text(note['title'], 
+                                                            style: const TextStyle(
+                                                              fontSize: 18,
+                                                              color: Colors.black,
+                                                              fontWeight: FontWeight.bold
+                                                            ),)),
                                                           const SizedBox(height: 10,),
                                                           Text(note['content'], 
                                                           style: const TextStyle(
@@ -327,8 +317,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 Container(
                                                 width: 2,
                                                 height: 60,
-                                                decoration: const BoxDecoration(
-                                                  color: Colors.black
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey.shade600
                                                 ), 
                                                 ),
                                                 const SizedBox(width: 30,),
@@ -428,7 +418,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 shape: const LinearBorder(),
                                 content: Builder(builder: (context) => 
                                 SizedBox(
-                                  width: MediaQuery.sizeOf(context).width * 0.65 ,
+                                  width: MediaQuery.sizeOf(context). width *  0.65,
                                   height: MediaQuery.sizeOf(context).height * 0.70,
                                   child: Form(
                                     key: formKey,
@@ -488,10 +478,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),),
                                         const SizedBox(height: 10,),
                                         SizedBox(
-                                          height: 48,
-                                          child: ListView.separated(
-                                            separatorBuilder: (context, index) => const SizedBox(width: 2,),
-                                            scrollDirection: Axis.horizontal,
+                                          height: 110,
+                                          child: GridView.builder(
+                                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
                                             itemCount: feelings.length  ,
                                             itemBuilder: (context, index) {
                                               return InkWell(
@@ -633,16 +622,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
     return null;
   }
-
-  Icon? getIconByFeeling(String feeling) {
-     for (var feel in feelings) {
-      if (feel["feeling"] == feeling) {
-        return feel["icon"];
-      }
-     }
-     return null;
-  }
-
+  
   String? getFeeling(int index) {
     for (int i = 0; i < feelings.length; i++) {
       if (index == i) {
@@ -660,21 +640,4 @@ class _ProfilePageState extends State<ProfilePage> {
     }
     return null;
   }
-
-  getDay(String date) {
-    final String dateDays = date.split(' ')[0];
-    return dateDays.split('-')[2];
-  }
-  getYear(String date) {
-    final String dateDays = date.split(' ')[0];
-    return dateDays.split('-')[0];
-  }
-
-  getMonth(String date) {
-    List<String> month =  ["January", "February", "March", "April", "May", "June", "July",
-                            "August", "September", "October", "November", "December"];
-    final monthNumber = int.parse(date.split('-')[1]);
-    return month[monthNumber - 1];
-  }
-
 }
