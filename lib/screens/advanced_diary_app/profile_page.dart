@@ -48,7 +48,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   String feeling = "";
   List<String> notesId = [];
-  List<int> count = List.generate(8, (int index) => 0);
   // List<Widget> icons =
   // [ const Icon(Icons.sentiment_very_satisfied, color: Colors.yellow),
   //   const Icon(Icons.sentiment_neutral, color: Colors.greenAccent,),
@@ -152,7 +151,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: Text("Error something happen"));
                         } else {
                           final notes = snapshot.data!.docs;
-                          countFeeling(notes);
+                          List<int> count = List.generate(8, (int index) => 0);
+                          countFeeling(notes, count);
                           if (notes.isEmpty) {
                             return const Padding(
                               padding: EdgeInsets.all(25.0),
@@ -453,12 +453,39 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                     ),
                                     Container(
-                                      width: MediaQuery.sizeOf(context).width,
-                                      height: MediaQuery.sizeOf(context).height * 0.32,
-                                      decoration: const BoxDecoration(
-                                        color: Color.fromARGB(255, 224, 191, 218)
-                                      ),
-                                    )
+                                        width: MediaQuery.sizeOf(context).width,
+                                        height:
+                                            MediaQuery.sizeOf(context).height *
+                                                0.32,
+                                        decoration: const BoxDecoration(
+                                            color: Color.fromARGB(
+                                                255, 224, 191, 218)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 8.0, left: 20),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: feelings.map(
+                                              (feeling) {
+                                                var index = feelings.indexOf(feeling);
+                                                return Row(
+                                                  children: [
+                                                    feeling['icon'] as Widget,
+                                                    const SizedBox(width: 10,),
+                                                    Text(
+                                                        "${percentage(count[index] , notes.length).toInt()}%",
+                                                        style: const TextStyle(
+                                                          fontSize: 17
+                                                        ),)
+                                                  ],
+                                                );
+                                              },
+                                            ).toList(),
+                                          ),
+                                        )),
                                   ],
                                 ),
                               )
@@ -847,7 +874,11 @@ class _ProfilePageState extends State<ProfilePage> {
     return null;
   }
 
-  void countFeeling(dynamic notes) {
+  double percentage(int value, int total) {
+    return (value / total) * 100;
+  }
+
+  void countFeeling(dynamic notes, List<int> count) {
     for (var note in notes) {
       switch (note['feeling']) {
         case "Happy":
